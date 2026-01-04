@@ -17,7 +17,7 @@ const initialBlocks: Block[] = loadBlocks() ?? [
         content: "",
         level: 1
     }
-]
+];
 export const useEditorStore = create<EditorState>((set) => ({
     blocks: initialBlocks,
     updateBlock: (id, content) =>
