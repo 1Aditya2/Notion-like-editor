@@ -1,8 +1,10 @@
+import { blockTypes } from "./block";
+
 export type SlashCommand = {
     id: string;
     label: string;
     description: string;
-    type: "paragraph" | "heading" | "code";
+    type: blockTypes;
     level?: 1 | 2 | 3;
 };
 export const SLASH_COMMANDS: SlashCommand[] = [
@@ -10,34 +12,40 @@ export const SLASH_COMMANDS: SlashCommand[] = [
       id: "paragraph",
       label: "Text",
       description: "Just start writing",
-      type: "paragraph",
+      type: blockTypes.PARAGRAPH,
     },
     {
       id: "h1",
       label: "Heading 1",
       description: "Big section heading",
-      type: "heading",
+      type: blockTypes.HEADING,
       level: 1,
     },
     {
       id: "h2",
       label: "Heading 2",
       description: "Medium section heading",
-      type: "heading",
+      type: blockTypes.HEADING,
       level: 2,
     },
     {
         id: 'h3',
         label: 'Heading 3',
         description: 'Small section heding',
-        type: 'heading',
+        type: blockTypes.HEADING,
         level: 3
     },
     {
       id: "code",
       label: "Code",
       description: "Code block",
-      type: "code",
+      type: blockTypes.CODE,
     },
+    {
+      id: "quote",
+      label: "Quote ('')",
+      description: "Write a quote",
+      type: blockTypes.QUOTE,
+    }
   ];
   

@@ -1,20 +1,17 @@
-import { Block } from "../../types/block";
+import { Block, blockTypes } from "../../types/block";
 import ParagraphBlock from "../Blocks/ParagraphBlock";
 import HeadingBlock from "../Blocks/HeadingBlock";
 import CodeBlock from "../Blocks/CodeBlock";
 import { useEditorStore } from "../../store/editorStore";
 import { RefObject, useState } from "react";
-import { keyDownHandler } from "../Blocks/blockFunctions";
+import { focusOnNewBlock, keyDownHandler } from "../Blocks/blockFunctions";
 import SlashMenu from "../SlashCommand/SlashCommandUI";
 import { createNewBlock } from "../../utils/helper";
 import { SlashCommand } from "../../types/command";
 import BlockWrapper from "../Blocks/BlockWrapper";
+import QuoteBlock from "../Blocks/QuoteBlock";
 
-type Props = {
-  block: Block;
-};
-
-export default function BlockRenderer({ block }: Props) {
+export default function BlockRenderer({ block }: { block: Block }) {
   const { blocks, updateBlock, insertBlockAfter, deleteBlock, replaceBlock } = useEditorStore();
   const [isSlashMenuOpen, setIsSlashMenuOpen] = useState(false);
 
@@ -25,12 +22,14 @@ export default function BlockRenderer({ block }: Props) {
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>,
     ref: RefObject<HTMLDivElement | null>) => {
-    keyDownHandler(e, ref, insertBlockAfter, deleteBlock, block.id, blocks);
+      if (!isSlashMenuOpen) {
+        keyDownHandler(e, ref, insertBlockAfter, deleteBlock, block.id, blocks);
+      }
   };
 
   const handleInput = (ref: RefObject<HTMLDivElement | null>) => {
     const text = ref.current?.innerText || "";
-    if (text.startsWith("/")) {
+    if (text.startsWith("/") && text.length === 1) {
       setIsSlashMenuOpen(true);
     } else {
       setIsSlashMenuOpen(false);
@@ -41,28 +40,30 @@ export default function BlockRenderer({ block }: Props) {
     const newBlock = createNewBlock(type, level);
     replaceBlock(block.id, newBlock);
     setIsSlashMenuOpen(false);
-    requestAnimationFrame(() => {
-      const el = document.querySelector(
-        `[data-block-id="${block.id}"]`
-      ) as HTMLDivElement | null;
-      el?.focus();
-    });
+    focusOnNewBlock(newBlock.id, true);
   }
 
   const renderBlock = () => {
     switch (block.type) {
-      case "paragraph":
+      case blockTypes.PARAGRAPH:
         return <ParagraphBlock block={block}
           handleBlur={handleBlur}
           handleInput={handleInput}
           handleKeyDown={handleKeyDown} />;
-      case "heading":
+      case blockTypes.HEADING:
         return <HeadingBlock block={block}
           handleBlur={handleBlur}
           handleInput={handleInput}
           handleKeyDown={handleKeyDown} />;
-      case 'code':
+      case blockTypes.CODE:
         return <CodeBlock
+          block={block}
+          handleBlur={handleBlur}
+          handleInput={handleInput}
+          handleKeyDown={handleKeyDown}
+        />
+      case blockTypes.QUOTE:
+        return <QuoteBlock
           block={block}
           handleBlur={handleBlur}
           handleInput={handleInput}
@@ -76,7 +77,7 @@ export default function BlockRenderer({ block }: Props) {
     <BlockWrapper id={block.id}>
       <div className="relative">
         {renderBlock()}
-        {isSlashMenuOpen && <SlashMenu onSelect={callOnSelect} />}
+        {isSlashMenuOpen && <SlashMenu onSelect={callOnSelect} onClose={() => setIsSlashMenuOpen(false)}/>}
       </div>
     </BlockWrapper>
   );

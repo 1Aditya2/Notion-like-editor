@@ -4,7 +4,7 @@ import Editor from './pages/Editor';
 
 function App() {
   return (
-    <div className="w-full min-h-screen flex items-center flex-col gap-12">
+    <div className="w-full min-h-screen flex items-center flex-col gap-24">
       <TopBar/>
       <Editor/>
     </div>

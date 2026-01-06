@@ -26,7 +26,7 @@ export default function BlockWrapper({ id, children }: Props) {
       <div
         {...attributes}
         {...listeners}
-        className="cursor-grab text-neutral-400 opacity-0 group-hover:opacity-100 select-none"
+        className="cursor-grab opacity-0 group-hover:opacity-100 select-none"
       >
         ⋮⋮
       </div>

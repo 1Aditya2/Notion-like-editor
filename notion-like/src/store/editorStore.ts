@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { Block } from "../types/block";
+import { Block, blockTypes } from "../types/block";
 import { loadBlocks, saveBlocks } from "./storeHelper";
 
 type EditorState = {
@@ -13,7 +13,7 @@ type EditorState = {
 const initialBlocks: Block[] = loadBlocks() ?? [
     {
         id: crypto.randomUUID(),
-        type: 'heading',
+        type: blockTypes.PARAGRAPH,
         content: "",
         level: 1
     }
@@ -35,7 +35,7 @@ export const useEditorStore = create<EditorState>((set) => ({
             if (index === -1) return state;
             const newBlock: Block = {
                 id: newId,
-                type: "paragraph",
+                type: blockTypes.PARAGRAPH,
                 content: "",
             };
             const blocks = [...state.blocks];

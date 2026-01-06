@@ -1,6 +1,6 @@
 import { Block } from "../../types/block";
 import { isBlockEmpty, moveCaretToEnd } from "../../utils/helper";
-const focusOnNewBlock = (newBlockId: string, placeCaretToEnd: boolean = false) => {
+export const focusOnNewBlock = (newBlockId: string, placeCaretToEnd: boolean = false) => {
     requestAnimationFrame(() => {
         const el = document.querySelector(
             `[data-block-id="${newBlockId}"]`
@@ -18,7 +18,6 @@ export const keyDownHandler = (e: React.KeyboardEvent<HTMLDivElement>,
     blockId: string,
     blocks: Block[]
 ) => {
-    console.log({ e });
     if (e.key === "Enter" && !e.shiftKey) {
         e.preventDefault();
         const newBlockId = insertBlockAfter(blockId);

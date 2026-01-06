@@ -1,4 +1,4 @@
-import { Block } from "../types/block";
+import { Block, blockTypes } from "../types/block";
 
 type CallbackFunction<Args extends any[]> = (...args: Args) => void;
 
@@ -38,30 +38,36 @@ export const isBlockEmpty = (ref: any) => {
     return text === "";
 };
 export const createNewBlock = (blockType: string, level: 1 | 2 | 3): Block => {
-    if (blockType === 'paragraph') {
+    if (blockType === blockTypes.PARAGRAPH) {
         return {
             id: crypto.randomUUID(),
-            type: "paragraph",
+            type: blockTypes.PARAGRAPH,
             content: "",
         }
-    } else if (blockType === 'code') {
+    } else if (blockType === blockTypes.CODE) {
         return {
             id: crypto.randomUUID(),
-            type: "code",
+            type: blockTypes.CODE,
             content: "",
             language: 'code'
         }
-    } else if (blockType === 'heading') {
+    } else if (blockType === blockTypes.HEADING) {
         return {
             id: crypto.randomUUID(),
-            type: "heading",
+            type: blockTypes.HEADING,
             content: '',
             level
+        }
+    } else if (blockType === blockTypes.QUOTE) {
+        return {
+            id: crypto.randomUUID(),
+            type: blockTypes.QUOTE,
+            content: "",
         }
     }
     return {
         id: crypto.randomUUID(),
-        type: "paragraph",
+        type: blockTypes.PARAGRAPH,
         content: "",
     }
 }
